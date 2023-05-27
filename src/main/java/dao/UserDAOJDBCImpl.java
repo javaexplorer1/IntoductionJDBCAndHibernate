@@ -40,7 +40,7 @@ public class UserDAOJDBCImpl implements UserDAO {
             preparedStatement.setByte(3, age);
             preparedStatement.executeUpdate();
             connection.commit();
-            System.out.println("User с " + name + " " + lastName + " добавлен в базу данных");
+            System.out.println("User с именем " + name + " фамилией " + lastName + " добавлен в базу данных");
         } catch (SQLException e) {
             try {
                 connection.rollback();
@@ -76,11 +76,8 @@ public class UserDAOJDBCImpl implements UserDAO {
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                User user = new User();
+                User user = new User(resultSet.getString("name"), resultSet.getString("lastName"), resultSet.getByte("age"));
                 user.setId(resultSet.getLong("id"));
-                user.setName(resultSet.getString("name"));
-                user.setLastName(resultSet.getString("lastName"));
-                user.setAge(resultSet.getByte("age"));
                 userList.add(user);
             }
                 connection.commit();
